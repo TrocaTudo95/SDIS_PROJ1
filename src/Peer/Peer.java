@@ -1,5 +1,11 @@
 package Peer;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -8,26 +14,30 @@ import java.rmi.server.UnicastRemoteObject;
 
 import chunks.File;
 import dispatchers.MC_Dispatcher;
+import memory.Disks;
 import rmi.RMI_inteface;
 
 public class Peer implements RMI_inteface{
 	
 	private static int ID;
+	private static Disks disk;
+	
 	private static MC_Dispatcher mcdispatcher;
+	
+	@Override
+	public void backup_file(File file, int replicationDegree) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	public int getID() {
 		return ID;
 	}
 
 	public void setID(int ID) {
-		Peer.ID = ID;
+		this.ID = ID;
 	}
 
-	@Override
-	public void backup_file(File file, int replicationDegree) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public static void main(String[] args) throws UnknownHostException {
 		InetAddress[] adresses= new InetAddress[3];
@@ -54,6 +64,39 @@ public class Peer implements RMI_inteface{
 		
 		
 	}
+	private static void createDisk() {
+		disk = new Disks();
+		saveDisks();
+		System.out.println("A new disk has been created");
+	}
+	
+	private static void loadDisks() throws ClassNotFoundException, IOException {
+		try {
+			FileInputStream FileInput= new FileInputStream("disks.data");
+			ObjectInputStream ObjectInput = new ObjectInputStream(FileInput);
+			disk = (Disks) ObjectInput.readObject();
+			ObjectInput.close();
+		} catch (FileNotFoundException e) {
+			createDisk();
+			System.out.println("Disk not found");
+		}
+	}
+	
+	public static void saveDisks() {
+		try {
+			FileOutputStream FileOutput = new FileOutputStream("disks.data");
+			ObjectOutputStream ObjectOutput = new ObjectOutputStream(FileOutput);
+			ObjectOutput.writeObject(disk);
+			ObjectOutput.close();
+		} catch (FileNotFoundException e) {
+			createDisk();
+			System.out.println("Disk Not Found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	
 
 }
