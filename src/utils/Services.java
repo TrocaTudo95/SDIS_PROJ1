@@ -1,7 +1,7 @@
 package utils;
 
 import chunks.Chunk;
-import peers.Peer;
+import Peer.Peer;
 
 public class Services {
 	
