@@ -1,18 +1,13 @@
 package Peer;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
 import dispatchers.MC_Dispatcher;
 import dispatchers.MDB_Dispatcher;
@@ -23,6 +18,7 @@ public class Peer implements RMI_inteface{
 	
 	private static int ID;
 	private static Services services;
+	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> repDegreeAtual;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
 
@@ -43,6 +39,14 @@ public class Peer implements RMI_inteface{
 	public static Services getServices() {
 		return services;
 	}
+	
+	  public static int getRepDegreeAtual(String fileId, int chunkNo) {
+	        try {
+	            return repDegreeAtual.get(fileId).get(chunkNo).size();
+	        } catch (NullPointerException npe) {
+	            return 0;
+	        }
+	    }
 
 	
 	public static void main(String[] args) throws UnknownHostException {
