@@ -13,6 +13,7 @@ import dispatchers.MC_Dispatcher;
 import dispatchers.MDB_Dispatcher;
 import rmi.RMI_inteface;
 import utils.Services;
+import utils.Functions;
 import chunks.Chunk;
 
 public class Peer implements RMI_inteface{
@@ -29,7 +30,7 @@ public class Peer implements RMI_inteface{
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
-		String File_ID 
+		String File_ID = Functions.getHashedFileID(file);
 	}
 	
 	public int getID() {
