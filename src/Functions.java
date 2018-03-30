@@ -1,10 +1,7 @@
-package utils;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-
-import Peer.Peer;
 
 public class Functions {
 	

@@ -1,4 +1,3 @@
-	package dispatchers;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -7,7 +6,6 @@ import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import utils.PacketHandler;
 
 public class MDB_Dispatcher implements Runnable
 

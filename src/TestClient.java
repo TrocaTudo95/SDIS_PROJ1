@@ -1,4 +1,4 @@
-package client;
+
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -7,7 +7,7 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.File;
-import rmi.RMI_inteface;
+
 
 public class TestClient {
 	private static RMI_inteface initiatorPeer;
