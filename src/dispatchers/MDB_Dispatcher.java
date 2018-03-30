@@ -12,7 +12,7 @@ import utils.PacketHandler;
 public class MDB_Dispatcher implements Runnable
 
 {
-	public MulticastSocket mdb_socket;
+	public static MulticastSocket mdb_socket;
 
 	public InetAddress mdb_address;
 	public int mdb_port;

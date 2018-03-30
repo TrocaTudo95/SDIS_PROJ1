@@ -2,6 +2,7 @@ package utils;
 
 import chunks.Chunk;
 import dispatchers.MC_Dispatcher;
+import dispatchers.MDB_Dispatcher;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -16,8 +17,10 @@ public class Services {
 	//Backup Headers
 	
 	public void PUTCHUNK(Chunk chunk,int senderID) {
+		
 		String header = "PUTCHUNK" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + chunk.getRepDegree() + " " + CRLF + CRLF;
-		// send To MDB
+		byte[] packet = concatB(header.getBytes(), chunk.getDados());
+		sendToMDB(packet);
 	}
 
 	void STORED(Chunk chunk,int senderID) {
@@ -65,6 +68,26 @@ public class Services {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	private synchronized void sendToMDB(byte[] buf) {
+		DatagramPacket packet = new DatagramPacket(buf, buf.length,Peer.getMDBDispacther().mdb_address, Peer.getMDBDispacther().mdb_port);
+
+		try {
+			MDB_Dispatcher.mdb_socket.send(packet);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static byte[] concatB(byte[] a, byte[] b) {
+
+		byte[] c = new byte[a.length + b.length];
+		System.arraycopy(a, 0, c, 0, a.length);
+		System.arraycopy(b, 0, c, a.length,  b.length);
+
+		return c;
 	}
 	
 	

@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 import java.io.File;
 import dispatchers.MC_Dispatcher;
+import dispatchers.MDB_Dispatcher;
 import memory.Disks;
 import rmi.RMI_inteface;
 import utils.Services;
@@ -25,6 +26,7 @@ public class Peer implements RMI_inteface{
 	private static Disks disk;
 	private static Services services;
 	private static MC_Dispatcher mcDispatcher;
+	private static MDB_Dispatcher mdbDispatcher;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
@@ -106,6 +108,10 @@ public class Peer implements RMI_inteface{
 
 	public static MC_Dispatcher getMcDispacther() {
 		return mcDispatcher;
+	}
+	
+	public static MDB_Dispatcher getMDBDispacther() {
+		return mdbDispatcher;
 	}
 	
 	
