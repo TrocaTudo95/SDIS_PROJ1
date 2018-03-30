@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -16,14 +17,15 @@ import java.io.File;
 import dispatchers.MC_Dispatcher;
 import memory.Disks;
 import rmi.RMI_inteface;
+import utils.Services;
 
 public class Peer implements RMI_inteface{
 	
 	private static int ID;
 	private static Disks disk;
-	
-	private static MC_Dispatcher mcdispatcher;
-	
+	private static Services services;
+	private static MC_Dispatcher mcDispatcher;
+
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
 		// TODO Auto-generated method stub
@@ -36,6 +38,10 @@ public class Peer implements RMI_inteface{
 
 	public void setID(int ID) {
 		this.ID = ID;
+	}
+	
+	public static Services getServices() {
+		return services;
 	}
 
 	
@@ -57,10 +63,10 @@ public class Peer implements RMI_inteface{
             e.printStackTrace();
 		}
 		
-		mcdispatcher= new MC_Dispatcher(ports[0],adresses[0]);
+		mcDispatcher= new MC_Dispatcher(ports[0],adresses[0]);
 		//faltam os outros
 		
-		new Thread(mcdispatcher).start();
+		new Thread(mcDispatcher).start();
 		//falta iniciar as outras threads
 		
 		
@@ -97,6 +103,11 @@ public class Peer implements RMI_inteface{
 			e.printStackTrace();
 		}
 	}
+
+	public static MC_Dispatcher getMcDispacther() {
+		return mcDispatcher;
+	}
+	
 	
 	
 

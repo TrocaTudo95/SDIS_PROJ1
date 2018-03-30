@@ -43,11 +43,6 @@ public class Chunk {
 	public byte[] getDados() {
 		return this.dados;
 	}
-	
-	@Override
-	public String toString() {
-		return this.fileId + "-" + this.chunkNo;
-	}
 
 	@Override
 	public int hashCode() {
