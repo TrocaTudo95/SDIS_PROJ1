@@ -16,14 +16,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.io.File;
 import dispatchers.MC_Dispatcher;
 import dispatchers.MDB_Dispatcher;
-import memory.Disks;
 import rmi.RMI_inteface;
 import utils.Services;
 
 public class Peer implements RMI_inteface{
 	
 	private static int ID;
-	private static Disks disk;
 	private static Services services;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
@@ -72,38 +70,6 @@ public class Peer implements RMI_inteface{
 		//falta iniciar as outras threads
 		
 		
-	}
-	private static void createDisk() {
-		disk = new Disks();
-		saveDisks();
-		System.out.println("A new disk has been created");
-	}
-	
-	private static void loadDisks() throws ClassNotFoundException, IOException {
-		try {
-			FileInputStream FileInput= new FileInputStream("disks.data");
-			ObjectInputStream ObjectInput = new ObjectInputStream(FileInput);
-			disk = (Disks) ObjectInput.readObject();
-			ObjectInput.close();
-		} catch (FileNotFoundException e) {
-			createDisk();
-			System.out.println("Disk not found");
-		}
-	}
-	
-	public static void saveDisks() {
-		try {
-			FileOutputStream FileOutput = new FileOutputStream("disks.data");
-			ObjectOutputStream ObjectOutput = new ObjectOutputStream(FileOutput);
-			ObjectOutput.writeObject(disk);
-			ObjectOutput.close();
-		} catch (FileNotFoundException e) {
-			createDisk();
-			System.out.println("Disk Not Found");
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public static MC_Dispatcher getMcDispacther() {

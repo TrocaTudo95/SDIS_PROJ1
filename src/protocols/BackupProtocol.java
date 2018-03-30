@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 import Peer.Peer;
 import chunks.Chunk;
-import memory.FileStorage;
 import utils.Functions;
 
 public class BackupProtocol implements Runnable{
@@ -67,29 +66,29 @@ public class BackupProtocol implements Runnable{
 		
 		String fileID = Functions.getHashedFileID(this.fileName);
 		
-		byte[] fileData = FileStorage.loadFile(this.fileName);
-
-		int nChunks = fileData.length / Chunk.SIZE + 1;
-
-		ByteArrayInputStream stream = new ByteArrayInputStream(fileData);
-		byte[] streamConsumer = new byte[Chunk.SIZE];
-		
-		for (int i = 0; i < nChunks; i++) {
-			byte[] chunkData;
-
-			if (i == nChunks - 1 && fileData.length % Chunk.SIZE == 0) {
-				chunkData = new byte[0];
-			} else {
-				int numBytesRead = stream.read(streamConsumer, 0, streamConsumer.length);
-
-				chunkData = Arrays.copyOfRange(streamConsumer, 0, numBytesRead);
-			}
-			
-			Chunk chunk = new Chunk(fileID, i, replicationDegree, chunkData);
-
-			BackupChunk(chunk,this.senderID);
-
-		}
+//		byte[] fileData = FileStorage.loadFile(this.fileName);
+//
+//		int nChunks = fileData.length / Chunk.SIZE + 1;
+//
+//		ByteArrayInputStream stream = new ByteArrayInputStream(fileData);
+//		byte[] streamConsumer = new byte[Chunk.SIZE];
+//		
+//		for (int i = 0; i < nChunks; i++) {
+//			byte[] chunkData;
+//
+//			if (i == nChunks - 1 && fileData.length % Chunk.SIZE == 0) {
+//				chunkData = new byte[0];
+//			} else {
+//				int numBytesRead = stream.read(streamConsumer, 0, streamConsumer.length);
+//
+//				chunkData = Arrays.copyOfRange(streamConsumer, 0, numBytesRead);
+//			}
+//			
+//			Chunk chunk = new Chunk(fileID, i, replicationDegree, chunkData);
+//
+//			BackupChunk(chunk,this.senderID);
+//
+//		}
 
 	}
 }
