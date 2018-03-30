@@ -24,7 +24,7 @@ public class Peer implements RMI_inteface{
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
 	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
-	//public static ConcurrentHashMap<String, ArrayList<Chunk>>savedChunks;
+	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 	public static int MEMORY= 10000000;
 	private static int used_space=0;
 
@@ -96,9 +96,23 @@ public class Peer implements RMI_inteface{
 		return mdbDispatcher;
 	}
 
-	public static void saveChunk(String file_ID, int chunkNO, int replication_degree) {
-		// TODO Auto-generated method stub
+	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
+		if(savedChunks.containsKey(file_ID)==false) {
+			savedChunks.put(file_ID, new ArrayList<>());
+			repDegreePerFile.put(file_ID, replication_degree);
+			repDegreeAtual.put(file_ID, new ConcurrentHashMap<>());
+			
+		}
+		savedChunks.get(file_ID).add(chunkNO);
 		
+		if (!repDegreeAtual.get(file_ID).containsKey(chunkNO))
+			repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
+		
+		repDegreeAtual.get(file_ID).get(chunkNO).add(Peer.getID());
+		
+		used_space +=body.length;
+		
+		//store chunk in memory
 	}
 
 	

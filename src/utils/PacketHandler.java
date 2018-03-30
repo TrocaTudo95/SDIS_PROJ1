@@ -56,14 +56,14 @@ public class PacketHandler implements Runnable {
 			if(senderID==Peer.getID())
 				return;
 			
-			//Chunk chunk= new Chunk(this.headerToken[3],Integer.parseInt(this.headerToken[4]),Integer.parseInt(this.headerToken[5]),this.body);
+			Chunk chunk= new Chunk(this.headerToken[3],Integer.parseInt(this.headerToken[4]),Integer.parseInt(this.headerToken[5]),this.body);
 			
 			if(Peer.getUsedSpace()+body.length< Peer.MEMORY) {
 				String File_ID=this.headerToken[3];
 				int chunkNO=Integer.parseInt(this.headerToken[4]);
 				int replication_degree=Integer.parseInt(this.headerToken[5]);
 				if (!Peer.savedChunks.containsKey(File_ID) || !Peer.savedChunks.get(File_ID).contains(chunkNO)) {
-					Peer.saveChunk(File_ID,chunkNO,replication_degree);
+					Peer.saveChunk(File_ID,chunkNO,replication_degree,body);
 					//enviar stored
 				}
 			
