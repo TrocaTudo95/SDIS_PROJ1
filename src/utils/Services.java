@@ -81,7 +81,7 @@ public class Services {
 		}
 	}
 	
-	private static byte[] concatB(byte[] a, byte[] b) {
+	private byte[] concatB(byte[] a, byte[] b) {
 
 		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
