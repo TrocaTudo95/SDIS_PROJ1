@@ -1,5 +1,8 @@
 package chunks;
 
+import java.util.ArrayList;
+
+
 public class Chunk {
 	public static final int SIZE = 64000;
 	private static final long serialVersionUID = 1L;
@@ -7,6 +10,7 @@ public class Chunk {
 	private byte[] dados;
 	private String fileId;
 	private int chunkNo;
+	private ArrayList<Integer> peers;
 
 	public Chunk(String fileId, int chunkNo, int repDegree, byte[] dados) {
 		this.fileId = fileId;
@@ -20,6 +24,15 @@ public class Chunk {
 	}
 	public int getChunkNo() {
 		return this.chunkNo;
+	}
+	public ArrayList<Integer> getPeers(){
+		return this.peers;
+	}
+	public void removePeer(int ID) {
+		peers.remove(ID);
+	}
+	public void setPeers(ArrayList<Integer> peers) {
+		this.peers = peers;
 	}
 
 

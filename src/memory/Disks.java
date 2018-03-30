@@ -2,6 +2,8 @@ package memory;
 
 import java.io.Serializable;
 
+import Peer.Peer;
+
 public class Disks implements Serializable {
 	
 	private int capacity;
@@ -26,10 +28,12 @@ public class Disks implements Serializable {
 	}
 	public void setCapacity(int Capacity) {
 		this.capacity = Capacity;
+		Peer.saveDisks();
 		printDisk();
 	}
 	public void addCapacity(int bytes) {
 		this.capacity += bytes;
+		Peer.saveDisks();
 		printDisk();
 	}
 	public void save(int bytes) {
@@ -37,11 +41,13 @@ public class Disks implements Serializable {
 			System.out.println("Insuficient Space to Save");
 		} else {
 			this.capacity_used += bytes;
+			Peer.saveDisks();
 			printDisk();
 		}
 	}
 	public void remove(int bytes) {
 		this.capacity_used -= bytes;
+		Peer.saveDisks();
 		printDisk();
 	}
 	
