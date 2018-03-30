@@ -31,9 +31,10 @@ public class Peer implements RMI_inteface{
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
 		String File_ID = Functions.getHashedFileID(file);
+
 	}
 	
-	public int getID() {
+	public static int getID() {
 		return ID;
 	}
 
