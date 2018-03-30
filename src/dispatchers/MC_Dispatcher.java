@@ -17,7 +17,6 @@ public class MC_Dispatcher implements Runnable {
 
 	public InetAddress mc_address;
 	public int mc_port;
-	private volatile HashMap<Chunk, ArrayList<Integer>> chunksStored;
 	public static final int CHUNK_SIZE =64000;
 
 	
@@ -40,23 +39,7 @@ public class MC_Dispatcher implements Runnable {
 		
 	}
 	
-	public void SaveChunksStored(Chunk chunk) {
-		if (!chunksStored.containsKey(chunk)) {
-			chunksStored.put(chunk, new ArrayList<Integer>());
-		}
-	}
 
-	public  void clearChunksStored(Chunk chunk) {
-		chunksStored.get(chunk).clear();
-	}
-
-	public  int getChunksStored(Chunk chunk) {
-		return chunksStored.get(chunk).size();
-	}
-
-	public  void stopSavingChunksStored(Chunk chunk) {
-		chunksStored.remove(chunk);
-	}
 
 	@Override
 	public void run() {

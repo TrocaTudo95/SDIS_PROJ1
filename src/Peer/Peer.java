@@ -12,12 +12,14 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
 import dispatchers.MC_Dispatcher;
 import dispatchers.MDB_Dispatcher;
 import rmi.RMI_inteface;
 import utils.Services;
+import chunks.Chunk;
 
 public class Peer implements RMI_inteface{
 	
@@ -25,11 +27,14 @@ public class Peer implements RMI_inteface{
 	private static Services services;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
+	//public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
+	public static ConcurrentHashMap<String, ArrayList<Chunk>>savedChunks;
+	public static int MEMORY= 10000000;
+	private static int used_space=0;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+		String File_ID 
 	}
 	
 	public int getID() {
@@ -43,6 +48,9 @@ public class Peer implements RMI_inteface{
 	public static Services getServices() {
 		return services;
 	}
+	public static int getUsedSpace() {
+		return used_space;
+	}
 
 	
 	public static void main(String[] args) throws UnknownHostException {
@@ -51,6 +59,7 @@ public class Peer implements RMI_inteface{
 		adresses[0]=InetAddress.getByName("224.0.0.0");
 		adresses[1]=InetAddress.getByName("224.0.0.0");
 		adresses[2]=InetAddress.getByName("224.0.0.0");
+		savedChunks=new ConcurrentHashMap<>();
 		
 		Peer peer=new Peer();
 		try {
@@ -78,6 +87,15 @@ public class Peer implements RMI_inteface{
 	
 	public static MDB_Dispatcher getMDBDispacther() {
 		return mdbDispatcher;
+	}
+
+	public static void saveChunk(String string, Chunk chunk) {
+		if(savedChunks.containsKey(string)) {
+			savedChunks.get(string).add(chunk);
+		}
+		else
+			savedChunks.put(string,new ArrayList<Chunk>());
+		
 	}
 	
 	

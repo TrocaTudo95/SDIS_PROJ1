@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.util.*;
+import Peer.Peer;
+import chunks.Chunk;
 
 public class PacketHandler implements Runnable {
 
@@ -45,6 +47,16 @@ public class PacketHandler implements Runnable {
 		
 	}
 	
+	
+	public void PUTCHUNK_handler() {
+		if(Peer.getUsedSpace()+body.length< Peer.MEMORY) {
+			
+			Chunk chunk= new Chunk(this.headerToken[3],Integer.parseInt(this.headerToken[4]),Integer.parseInt(this.headerToken[5]),this.body);
+			Peer.saveChunk(this.headerToken[3],chunk);
+			
+		}
+			
+	}
 	public String[] HeaderExtractor() {
 		ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
 		BufferedReader reader = new BufferedReader(
@@ -58,7 +70,7 @@ public class PacketHandler implements Runnable {
 			e.printStackTrace();
 		}
 		
-		return this.header.split("[ ]+");
+		return this.header.split(("\\s+"));
 	}
 	
 	public byte[] BodyExtractor() {
