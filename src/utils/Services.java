@@ -58,7 +58,8 @@ public class Services {
 		//send to mc
 	}
 	
-	private static void sendToMC(byte[] buf) {
+
+	private synchronized static void sendToMC(byte[] buf) {
 		DatagramPacket packet = new DatagramPacket(buf, buf.length,Peer.getMcDispacther().mc_address, Peer.getMcDispacther().mc_port);
 
 		try {

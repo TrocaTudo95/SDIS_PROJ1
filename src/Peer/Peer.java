@@ -27,6 +27,8 @@ public class Peer implements RMI_inteface{
 	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 	public static int MEMORY= 10000000;
 	private static int used_space=0;
+	public static ConcurrentHashMap<Integer,Integer>chunksStored;
+	public static ConcurrentHashMap<String,ConcurrentHashMap<Integer,ArrayList<Integer>>>peersContainingChunks;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
