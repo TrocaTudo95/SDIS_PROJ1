@@ -16,7 +16,7 @@ public class Services {
 	
 	//Backup Headers
 	
-	public void PUTCHUNK(Chunk chunk,int senderID) {
+	public static void PUTCHUNK(Chunk chunk,int senderID) {
 		
 		String header = "PUTCHUNK" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + chunk.getRepDegree() + " " + CRLF + CRLF;
 		byte[] packet = concatB(header.getBytes(), chunk.getDados());
@@ -70,7 +70,7 @@ public class Services {
 		
 	}
 	
-	private synchronized void sendToMDB(byte[] buf) {
+	private synchronized static void sendToMDB(byte[] buf) {
 		DatagramPacket packet = new DatagramPacket(buf, buf.length,Peer.getMDBDispacther().mdb_address, Peer.getMDBDispacther().mdb_port);
 
 		try {
@@ -81,7 +81,7 @@ public class Services {
 		}
 	}
 	
-	private byte[] concatB(byte[] a, byte[] b) {
+	private static byte[] concatB(byte[] a, byte[] b) {
 
 		byte[] c = new byte[a.length + b.length];
 		System.arraycopy(a, 0, c, 0, a.length);
