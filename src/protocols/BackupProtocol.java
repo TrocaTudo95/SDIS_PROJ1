@@ -1,7 +1,13 @@
 package protocols;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import Peer.Peer;
 import chunks.Chunk;
+import utils.Functions;
 import utils.Services;
 
 public class BackupProtocol implements Runnable{
@@ -9,7 +15,7 @@ public class BackupProtocol implements Runnable{
 
 	private int senderID;
 	private int replicationDegree;
-	private Chunk chunk;
+	private static Chunk chunk;
 	
 	
 	public BackupProtocol(Chunk chunk,int replicationDegree,int senderID) {
@@ -17,6 +23,38 @@ public class BackupProtocol implements Runnable{
 		this.replicationDegree= replicationDegree;
 		this.senderID=senderID;
 	}
+	
+    public static void backupFile(String path, int repDegree) {
+    	
+        File file = new File(path);
+        int chunkNo = 1;
+
+        try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
+
+            int temp = 0;
+            do {
+                byte[] buffer = new byte[Chunk.SIZE];
+                temp = inputStream.read(buffer);
+                if(temp == -1) {
+                	byte[] emptyData = new byte[0];
+                	Chunk chunk= new Chunk(Functions.getHashedFileID(file),chunkNo,repDegree,emptyData);
+                BackupProtocol backup = new BackupProtocol(chunk,repDegree,Peer.getID());
+                backup.run();
+                }else {
+                		Chunk chunk= new Chunk(Functions.getHashedFileID(file),chunkNo,repDegree,buffer);
+                    BackupProtocol backup = new BackupProtocol(chunk,repDegree,Peer.getID());
+                    backup.run();
+                }
+                
+                chunkNo++;
+            } while (temp == Chunk.SIZE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+	
+	
+	
 	
 	@Override
 	public void run() {
@@ -38,6 +76,8 @@ public class BackupProtocol implements Runnable{
         else
             System.out.println("Backup for chunk finished successfully");
     }
+	
+	
 
 
 }
