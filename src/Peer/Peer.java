@@ -9,6 +9,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 import dispatchers.MC_Dispatcher;
 import dispatchers.MDB_Dispatcher;
 import rmi.RMI_inteface;
@@ -114,12 +117,16 @@ public class Peer implements RMI_inteface{
 		
 		used_space +=body.length;
 		
-		//store chunk in memory
+		File chunkFile = new File("chunksDir/", file_ID + "_" + chunkNO);
+        chunkFile.getParentFile().mkdirs();
+        try {
+            FileOutputStream out = new FileOutputStream(chunkFile);
+            out.write(body);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
-	
-	
-	
-	
 
 }
