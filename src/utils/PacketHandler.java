@@ -64,7 +64,8 @@ public class PacketHandler implements Runnable {
 				int replication_degree=Integer.parseInt(this.headerToken[5]);
 				if (!Peer.savedChunks.containsKey(File_ID) || !Peer.savedChunks.get(File_ID).contains(chunkNO)) {
 					Peer.saveChunk(File_ID,chunkNO,replication_degree,body);
-					//enviar stored
+					//send store message
+					Services.STORED(chunk,Peer.getID());
 				}
 			
 		}

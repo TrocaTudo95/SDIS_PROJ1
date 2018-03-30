@@ -23,7 +23,7 @@ public class Services {
 		sendToMDB(packet);
 	}
 
-	void STORED(Chunk chunk,int senderID) {
+	public static void STORED(Chunk chunk,int senderID) {
 		String header = "STORED" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + CRLF + CRLF ;
 		sendToMC(header.getBytes());
 	}
@@ -58,7 +58,7 @@ public class Services {
 		//send to mc
 	}
 	
-	private void sendToMC(byte[] buf) {
+	private static void sendToMC(byte[] buf) {
 		DatagramPacket packet = new DatagramPacket(buf, buf.length,Peer.getMcDispacther().mc_address, Peer.getMcDispacther().mc_port);
 
 		try {
