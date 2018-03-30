@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import utils.PacketHandler;
 
@@ -14,6 +16,7 @@ public class MC_Dispatcher implements Runnable {
 
 	public InetAddress mc_address;
 	public int mc_port;
+	private volatile HashMap<Integer, ArrayList<Integer>> chunksStored;
 	public static final int CHUNK_SIZE =64000;
 
 	
