@@ -7,16 +7,17 @@ import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import chunks.Chunk;
 import utils.PacketHandler;
 
 public class MC_Dispatcher implements Runnable {
 	
 	
-	public MulticastSocket mc_socket;
+	public static MulticastSocket mc_socket;
 
 	public InetAddress mc_address;
 	public int mc_port;
-	private volatile HashMap<Integer, ArrayList<Integer>> chunksStored;
+	private volatile HashMap<Chunk, ArrayList<Integer>> chunksStored;
 	public static final int CHUNK_SIZE =64000;
 
 	
@@ -37,6 +38,24 @@ public class MC_Dispatcher implements Runnable {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public void SaveChunksStored(Chunk chunk) {
+		if (!chunksStored.containsKey(chunk)) {
+			chunksStored.put(chunk, new ArrayList<Integer>());
+		}
+	}
+
+	public  void clearChunksStored(Chunk chunk) {
+		chunksStored.get(chunk).clear();
+	}
+
+	public  int getChunksStored(Chunk chunk) {
+		return chunksStored.get(chunk).size();
+	}
+
+	public  void stopSavingChunksStored(Chunk chunk) {
+		chunksStored.remove(chunk);
 	}
 
 	@Override
