@@ -52,7 +52,7 @@ public class TestClient {
 			replication_degree=Integer.parseInt(args[3]);
 			
 			
-		//faltam verificações
+		//faltam verificacoes
 			
 		
 		
