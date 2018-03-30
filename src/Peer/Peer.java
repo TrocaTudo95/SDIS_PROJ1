@@ -6,7 +6,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import chunks.File;
+import java.io.File;
 import dispatchers.MC_Dispatcher;
 import rmi.RMI_inteface;
 
@@ -51,6 +51,7 @@ public class Peer implements RMI_inteface{
 		//faltam os outros
 		
 		new Thread(mcdispatcher).start();
+		//falta iniciar as outras threads
 		
 		
 	}

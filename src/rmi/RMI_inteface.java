@@ -2,8 +2,8 @@ package rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.io.File;
 
-import chunks.File;
 
 public interface RMI_inteface extends Remote{
 

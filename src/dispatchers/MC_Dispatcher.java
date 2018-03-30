@@ -54,7 +54,7 @@ public class MC_Dispatcher implements Runnable {
 			//missing verification to see if the peers are the same
 			
 			new Thread(new PacketHandler(mc_packet)).start();
-		}
+		} 	
 		
 		
 	}
