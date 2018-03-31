@@ -3,6 +3,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Random;
 
 
 public class BackupProtocol implements Runnable{
@@ -56,13 +57,15 @@ public class BackupProtocol implements Runnable{
 		// TODO Auto-generated method stub
 		
 		int attempts=0;
+		Random rand = new Random();
 		
 		while (attempts < 5 && Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
             Services.PUTCHUNK(chunk,senderID);
             try {
             		System.out.println("thread going to sleep");
                // Thread.sleep(2 ^ attempts * 1000);
-            		Thread.sleep(400);
+            		int n_sleep= rand.nextInt(400);
+            		Thread.sleep(n_sleep);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
