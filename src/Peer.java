@@ -121,6 +121,7 @@ public class Peer implements RMI_inteface {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Chunk Saved");
 	}
 
 }

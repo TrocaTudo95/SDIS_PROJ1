@@ -1,5 +1,4 @@
 
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,7 +60,9 @@ public class BackupProtocol implements Runnable{
 		while (attempts < 5 && Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
             Services.PUTCHUNK(chunk,senderID);
             try {
-                Thread.sleep(2 ^ attempts * 1000);
+            		System.out.println("thread going to sleep");
+               // Thread.sleep(2 ^ attempts * 1000);
+            		Thread.sleep(400);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

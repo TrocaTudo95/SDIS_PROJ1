@@ -72,6 +72,7 @@ public class PacketHandler implements Runnable {
 				System.out.println("saving chunk");
 				Peer.saveChunk(File_ID, chunkNO, replication_degree, body);
 				// send store message
+				System.out.println("Sending Stored message");
 				Services.STORED(chunk, Peer.getID());
 
 			}
@@ -85,6 +86,7 @@ public class PacketHandler implements Runnable {
 	public void STORED_handler() {
 
 		int senderID = Integer.parseInt(headerToken[2]);
+		System.out.println("Handling Stored message");
 		if (senderID == Peer.getID())
 			return;
 		int chunkNo = Integer.parseInt(headerToken[4]);
