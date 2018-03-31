@@ -19,7 +19,6 @@ public class PacketHandler implements Runnable {
 	}
 
 	public void run() {
-		System.out.println("handling message");
 		this.headerToken = HeaderExtractor();
 		switch (headerToken[0]) {
 
@@ -30,51 +29,38 @@ public class PacketHandler implements Runnable {
 		case "STORED":
 			STORED_handler();
 			break;
-		// if(this.headerToken[0] == "PUTCHUNK") {
-		// PUTCHUNK_handler();
-		// }else if(this.headerToken[0] == "STORED") {
-		// //STORED Handler
-		// }else if(this.headerToken[0] == "GETCHUNK") {
-		// System.out.println("GETCHUNK");
-		//
-		// }else if(this.headerToken[0] == "CHUNK") {
-		// System.out.println("CHUNK");
-		//
-		// }else if(this.headerToken[0] == "DELETE") {
-		// System.out.println("DELETE");
-		//
-		// }else if(this.headerToken[0] == "REMOVED") {
-		// System.out.println("REMOVED");
-		//
-		// }
+		case "GETCHUNK":
+			break;
+		case "CHUNK":
+			break;
+		case "DELETE":
+			break;
+		case "REMOVED":
+			break;
 		}
 
 	}
 
 	public void PUTCHUNK_handler() {
 
-		System.out.println("handling putchunk message");
 		int senderID = Integer.parseInt(headerToken[2]);
 		// ignore messages from his own
 		if (senderID == Peer.getID())
 			return;
-
-		Chunk chunk = new Chunk(this.headerToken[3], Integer.parseInt(this.headerToken[4]),
-				Integer.parseInt(this.headerToken[5]), this.body);
-
-		if (Peer.getUsedSpace() + body.length < Peer.MEMORY) {
-			System.out.println("it has space to store");
+		System.out.println("handling putchunk message");
+		
+		Chunk chunk = new Chunk(this.headerToken[3], Integer.parseInt(this.headerToken[4]),Integer.parseInt(this.headerToken[5]), this.body);
+		int SpaceNedeed = Peer.getUsedSpace() + body.length;
+		if (SpaceNedeed < Peer.MEMORY) {
+			System.out.println("It has space to store");
 			String File_ID = this.headerToken[3];
-			System.out.println(File_ID);
 			int chunkNO = Integer.parseInt(this.headerToken[4]);
 			int replication_degree = Integer.parseInt(this.headerToken[5]);
-			if (Peer.savedChunks.containsKey(File_ID)==false || !Peer.savedChunks.get(File_ID).contains(chunkNO)) {
+			if (!(Peer.savedChunks.containsKey(File_ID)) || !(Peer.savedChunks.get(File_ID).contains(chunkNO))) {
 				System.out.println("saving chunk");
 				Peer.saveChunk(File_ID, chunkNO, replication_degree, body);
-				// send store message
 				System.out.println("Sending Stored message");
 				Services.STORED(chunk, Peer.getID());
-
 			}
 
 		} else {
@@ -86,12 +72,11 @@ public class PacketHandler implements Runnable {
 	public void STORED_handler() {
 
 		int senderID = Integer.parseInt(headerToken[2]);
-		System.out.println("Handling Stored message");
 		if (senderID == Peer.getID())
 			return;
+		System.out.println("Handling Stored message");
 		int chunkNo = Integer.parseInt(headerToken[4]);
 		int value = 0;
-		//System.out.println("merdou "+Peer.chunksStored.contains(chunkNo));
 		if (Peer.chunksStored.contains(chunkNo)) {
 			Peer.chunksStored.getOrDefault(chunkNo, value);
 			value++;
@@ -122,10 +107,10 @@ public class PacketHandler implements Runnable {
 
 	public String[] HeaderExtractor() {
 		ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
 
 		try {
-			this.header = reader.readLine();
+			this.header = bufferedReader.readLine();
 			System.out.println(this.header);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -138,18 +123,19 @@ public class PacketHandler implements Runnable {
 	public byte[] BodyExtractor() {
 
 		ByteArrayInputStream stream = new ByteArrayInputStream(packet.getData());
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
 
-		String linha = "linha";
+		String linha = "NotEmpty";
 		int SumLinhas = 0;
 		int numLinhas = 0;
 
 		while (!linha.isEmpty()) {
 			try {
-				linha = reader.readLine();
-				SumLinhas += linha.length();
+				linha = bufferedReader.readLine();
 				numLinhas++;
+				SumLinhas += linha.length();
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -158,7 +144,6 @@ public class PacketHandler implements Runnable {
 		byte[] data=packet.getData();
 		int length=packet.getLength();
 		
-
 		return Arrays.copyOfRange(data, BodyStarter,length );
 	}
 
