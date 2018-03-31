@@ -53,9 +53,9 @@ public class Peer implements RMI_inteface {
 
 	public static int getRepDegreeAtual(String fileId, int chunkNo) {
 		try {
-			return repDegreeAtual.get(fileId).get(chunkNo).size();
+			return Peer.peersContainingChunks.get(fileId).get(chunkNo).size();
 		} catch (NullPointerException npe) {
-			System.out.println("merdouuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu "+repDegreeAtual.size());
+			System.out.println("merdouuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu ");
 			return 0;
 		}
 	}
@@ -102,23 +102,22 @@ public class Peer implements RMI_inteface {
 	}
 
 	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
-		if (savedChunks.containsKey(file_ID) == false) {
+		if (Peer.savedChunks.containsKey(file_ID) == false) {
 			System.out.println("Does not contain the file yet");
-			savedChunks.put(file_ID, new ArrayList<>());
-			repDegreePerFile.put(file_ID, replication_degree);
-			repDegreeAtual.put(file_ID, new ConcurrentHashMap<>());
+			Peer.savedChunks.put(file_ID, new ArrayList<>());
+			Peer.repDegreePerFile.put(file_ID, replication_degree);
 
 		}
-		savedChunks.get(file_ID).add(chunkNO);
-		if (!repDegreeAtual.get(file_ID).containsKey(chunkNO)) {
+		Peer.savedChunks.get(file_ID).add(chunkNO);
+		if (!Peer.repDegreeAtual.get(file_ID).containsKey(chunkNO)) {
 			System.out.println("saving on redDegree \n\n");
-			repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
+			Peer.repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
 			
 		}
 
-		repDegreeAtual.get(file_ID).get(chunkNO).add(Peer.getID());
+		Peer.repDegreeAtual.get(file_ID).get(chunkNO).add(Peer.getID());
 		
-		System.out.println("ja ta em:"+repDegreeAtual.get(file_ID).get(chunkNO).size());
+		System.out.println("ja ta em:"+Peer.repDegreeAtual.get(file_ID).get(chunkNO).size());
 
 		used_space += body.length;
 

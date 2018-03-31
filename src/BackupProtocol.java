@@ -62,7 +62,7 @@ public class BackupProtocol implements Runnable{
 		int attempts=0;
 		Random rand = new Random();
 		
-		while (attempts < 5 && Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
+		while (attempts < 5 &&Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
 			System.out.println("\n\nFILE ID:"+chunk.getFileID()+ " ChunkNO:"+chunk.getChunkNo()+ "\n\n");
 			//System.out.println("Already tried " +attempts +"times. current replicationDegree: "+Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()));
             Services.PUTCHUNK(chunk,senderID);
