@@ -25,13 +25,13 @@ public class BackupProtocol implements Runnable{
         int chunkNo = 1;
 
         try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
-        		int temp;
+    
             int nChunks = (int) (file.length()/Chunk.SIZE);
             int lastChunk= (int) (file.length()%Chunk.SIZE);
-            if(nChunks > 0) {
+			if(nChunks > 0) {
             		for(int i=0; i < nChunks; i++) {
             				byte[] buffer = new byte[Chunk.SIZE];
-            				temp = inputStream.read(buffer);          		
+            				inputStream.read(buffer);          		
             				Chunk chunk= new Chunk(Functions.getHashedFileID(file),chunkNo,repDegree,buffer);
             				BackupProtocol backup = new BackupProtocol(chunk,repDegree,Peer.getID());
             				backup.run();
@@ -41,7 +41,7 @@ public class BackupProtocol implements Runnable{
             	
             }
             byte[] lastData = new byte[lastChunk];
-    			temp = inputStream.read(lastData);
+    			inputStream.read(lastData);
     			Chunk chunk= new Chunk(Functions.getHashedFileID(file),chunkNo,repDegree,lastData);
     			BackupProtocol backup = new BackupProtocol(chunk,repDegree,Peer.getID());
     			backup.run();
