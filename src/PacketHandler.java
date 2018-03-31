@@ -34,6 +34,7 @@ public class PacketHandler implements Runnable {
 		case "CHUNK":
 			break;
 		case "DELETE":
+			DELETE_handler();
 			break;
 		case "REMOVED":
 			break;
@@ -90,6 +91,12 @@ public class PacketHandler implements Runnable {
 
 		MDB_Dispatcher.storedReceived(File_ID, chunkNO, senderID);
 
+	}
+	
+	public void DELETE_handler() {
+		String File_ID = this.headerToken[3];
+		Peer.deleteFile(File_ID);
+		
 	}
 
 	public String[] HeaderExtractor() {

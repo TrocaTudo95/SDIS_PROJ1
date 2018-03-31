@@ -34,6 +34,15 @@ public class Peer implements RMI_inteface {
 		BackupProtocol.backupFile(file, replicationDegree);
 
 	}
+	
+	@Override
+	public void delete_file(File file) throws RemoteException {
+		System.out.println("Starting Deletion");
+		String File_ID = Functions.getHashedFileID(file);
+		Services.DELETE(File_ID, ID);
+		
+	}
+	
 
 	public static int getID() {
 		return ID;
@@ -123,6 +132,11 @@ public class Peer implements RMI_inteface {
 			e.printStackTrace();
 		}
 		System.out.println("Chunk Saved");
+	}
+
+	public static void deleteFile(String file_ID) {
+		//apagar 
+		
 	}
 
 }
