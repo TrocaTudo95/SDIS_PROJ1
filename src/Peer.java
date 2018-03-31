@@ -109,15 +109,7 @@ public class Peer implements RMI_inteface {
 
 		}
 		Peer.savedChunks.get(file_ID).add(chunkNO);
-		if (!Peer.repDegreeAtual.get(file_ID).containsKey(chunkNO)) {
-			System.out.println("saving on redDegree \n\n");
-			Peer.repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
-			
-		}
-
-		Peer.repDegreeAtual.get(file_ID).get(chunkNO).add(Peer.getID());
 		
-		System.out.println("ja ta em:"+Peer.repDegreeAtual.get(file_ID).get(chunkNO).size());
 
 		used_space += body.length;
 

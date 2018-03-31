@@ -85,23 +85,10 @@ public class PacketHandler implements Runnable {
 		} else {
 			Peer.chunksStored.put(chunkNo, 1);
 		}
+		String File_ID = this.headerToken[3];
+		int chunkNO = Integer.parseInt(this.headerToken[4]);
 
-		String fileID = headerToken[3];
-		if (Peer.peersContainingChunks.contains(fileID)) {
-			if (Peer.peersContainingChunks.get(fileID).contains(chunkNo)) {
-				Peer.peersContainingChunks.get(fileID).get(chunkNo).add(senderID);
-			} else {
-				ArrayList<Integer> list = new ArrayList<Integer>();
-				list.add(senderID);
-				Peer.peersContainingChunks.get(fileID).put(chunkNo, list);
-			}
-		} else {
-			ArrayList<Integer> list = new ArrayList<Integer>();
-			list.add(senderID);
-			ConcurrentHashMap<Integer, ArrayList<Integer>> chunks = new ConcurrentHashMap<Integer, ArrayList<Integer>>();
-			chunks.put(chunkNo, list);
-			Peer.peersContainingChunks.put(fileID, chunks);
-		}
+		MDB_Dispatcher.storedReceived(File_ID, chunkNO, senderID);
 
 	}
 
