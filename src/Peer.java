@@ -67,6 +67,8 @@ public class Peer implements RMI_inteface {
 		adresses[1] = InetAddress.getByName("224.0.0.0");
 		adresses[2] = InetAddress.getByName("224.0.0.0");
 		savedChunks = new ConcurrentHashMap<>();
+		repDegreeAtual= new ConcurrentHashMap<>();
+		repDegreePerFile=new ConcurrentHashMap<>();
 
 		Peer peer = new Peer();
 		try {
@@ -98,13 +100,13 @@ public class Peer implements RMI_inteface {
 
 	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
 		if (savedChunks.containsKey(file_ID) == false) {
+			System.out.println("Does not contain the file yet");
 			savedChunks.put(file_ID, new ArrayList<>());
 			repDegreePerFile.put(file_ID, replication_degree);
 			repDegreeAtual.put(file_ID, new ConcurrentHashMap<>());
 
 		}
 		savedChunks.get(file_ID).add(chunkNO);
-
 		if (!repDegreeAtual.get(file_ID).containsKey(chunkNO))
 			repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
 
