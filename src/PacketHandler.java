@@ -21,10 +21,10 @@ public class PacketHandler implements Runnable {
 	public void run() {
 		System.out.println("handling message");
 		this.headerToken = HeaderExtractor();
-		this.body = BodyExtractor();
 		switch (headerToken[0]) {
 
 		case "PUTCHUNK":
+			this.body = BodyExtractor();
 			PUTCHUNK_handler();
 			break;
 		case "STORED":
@@ -154,8 +154,11 @@ public class PacketHandler implements Runnable {
 		}
 
 		int BodyStarter = ("\r" + "\n").getBytes().length * SumLinhas + numLinhas;
+		byte[] data=packet.getData();
+		int length=packet.getLength();
+		
 
-		return Arrays.copyOfRange(packet.getData(), BodyStarter, packet.getLength());
+		return Arrays.copyOfRange(data, BodyStarter,length );
 	}
 
 }

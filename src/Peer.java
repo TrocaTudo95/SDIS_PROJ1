@@ -68,7 +68,9 @@ public class Peer implements RMI_inteface {
 		adresses[2] = InetAddress.getByName("224.0.0.0");
 		savedChunks = new ConcurrentHashMap<>();
 		repDegreeAtual= new ConcurrentHashMap<>();
+		chunksStored= new ConcurrentHashMap<>();
 		repDegreePerFile=new ConcurrentHashMap<>();
+		peersContainingChunks=new ConcurrentHashMap<>();
 
 		Peer peer = new Peer();
 		try {
