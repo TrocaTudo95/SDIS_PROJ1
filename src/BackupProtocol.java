@@ -20,9 +20,9 @@ public class BackupProtocol implements Runnable{
 		this.senderID=senderID;
 	}
 	
-    public static void backupFile(String path, int repDegree) {
+    public static void backupFile(File file, int repDegree) {
     	
-        File file = new File(path);
+       
         int chunkNo = 1;
 
         try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {

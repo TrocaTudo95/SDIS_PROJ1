@@ -12,7 +12,7 @@ import java.io.File;
 public class TestClient {
 	private static RMI_inteface initiatorPeer;
 	private static String stub_name;
-	private static String protocol;
+	//private static String protocol;
 	private static File file;
 	private static int replication_degree;
 	
@@ -22,7 +22,7 @@ public class TestClient {
 		
 //connect to RMI
 		try {
-			Registry registry = LocateRegistry.getRegistry("localhost");
+			Registry registry = LocateRegistry.getRegistry();
 
 			initiatorPeer =  (RMI_inteface) registry.lookup(stub_name);
 
@@ -31,9 +31,13 @@ public class TestClient {
             e.printStackTrace();
 		
 	}
-		
-		if(protocol=="BACKUP") {
+		String protocol = args[1].toUpperCase();
+		System.out.println(protocol);
+		switch (protocol) {
+		case"BACKUP":
+			System.out.println("oi");
 			initiatorPeer.backup_file(file, replication_degree);
+			break;
 		}
 	}
 
@@ -44,7 +48,7 @@ public class TestClient {
 			
 			
 			stub_name=args[0];
-			protocol=args[1];
+			//protocol=args[1];
 			String file_name=args[2];
 			
 			file = new File(file_name);

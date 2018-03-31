@@ -12,7 +12,7 @@ public class Services {
 	//Backup Headers
 	
 	public static void PUTCHUNK(Chunk chunk,int senderID) {
-		
+		System.out.println("sending putchunk");
 		String header = "PUTCHUNK" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + chunk.getRepDegree() + " " + CRLF + CRLF;
 		byte[] packet = concatB(header.getBytes(), chunk.getDados());
 		sendToMDB(packet);
@@ -75,6 +75,7 @@ public class Services {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("writing to mdb");
 	}
 	
 	private static byte[] concatB(byte[] a, byte[] b) {

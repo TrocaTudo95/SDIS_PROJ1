@@ -19,7 +19,7 @@ public class MDB_Dispatcher implements Runnable
 
 	
 	
-	public MDB_Dispatcher(int mdb_port,InetAddress mdbS_address) {
+	public MDB_Dispatcher(int mdb_port,InetAddress mdb_address) {
 		this.mdb_port=mdb_port;
 		this.mdb_address=mdb_address;
 	}
@@ -54,7 +54,7 @@ public class MDB_Dispatcher implements Runnable
 			}
 			
 			//missing verification to see if the peers are the same
-			
+			System.out.println("received packet");
 			new Thread(new PacketHandler(mdb_packet)).start();
 		} 	
 		
