@@ -91,6 +91,7 @@ public class PacketHandler implements Runnable {
 			return;
 		int chunkNo = Integer.parseInt(headerToken[4]);
 		int value = 0;
+		//System.out.println("merdou "+Peer.chunksStored.contains(chunkNo));
 		if (Peer.chunksStored.contains(chunkNo)) {
 			Peer.chunksStored.getOrDefault(chunkNo, value);
 			value++;
