@@ -14,7 +14,7 @@ public class Peer implements RMI_inteface {
 
 	private static int ID;
 	private static Services services;
-	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> repDegreeAtual;
+	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> repDegreeAtual;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
 	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
@@ -55,6 +55,7 @@ public class Peer implements RMI_inteface {
 		try {
 			return repDegreeAtual.get(fileId).get(chunkNo).size();
 		} catch (NullPointerException npe) {
+			System.out.println("merdouuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu "+repDegreeAtual.size());
 			return 0;
 		}
 	}
@@ -109,10 +110,15 @@ public class Peer implements RMI_inteface {
 
 		}
 		savedChunks.get(file_ID).add(chunkNO);
-		if (!repDegreeAtual.get(file_ID).containsKey(chunkNO))
+		if (!repDegreeAtual.get(file_ID).containsKey(chunkNO)) {
+			System.out.println("saving on redDegree \n\n");
 			repDegreeAtual.get(file_ID).put(chunkNO, new ArrayList<>());
+			
+		}
 
 		repDegreeAtual.get(file_ID).get(chunkNO).add(Peer.getID());
+		
+		System.out.println("ja ta em:"+repDegreeAtual.get(file_ID).get(chunkNO).size());
 
 		used_space += body.length;
 

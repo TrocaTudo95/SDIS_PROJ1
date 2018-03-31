@@ -15,9 +15,9 @@ public class BackupProtocol implements Runnable{
 	
 	
 	public BackupProtocol(Chunk chunk,int replicationDegree,int senderID) {
-		this.chunk=chunk;
 		this.replicationDegree= replicationDegree;
 		this.senderID=senderID;
+		this.chunk=chunk;
 	}
 	
     public static void backupFile(File file, int repDegree) {
@@ -63,10 +63,11 @@ public class BackupProtocol implements Runnable{
 		Random rand = new Random();
 		
 		while (attempts < 5 && Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
+			System.out.println("\n\nFILE ID:"+chunk.getFileID()+ " ChunkNO:"+chunk.getChunkNo()+ "\n\n");
+			//System.out.println("Already tried " +attempts +"times. current replicationDegree: "+Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()));
             Services.PUTCHUNK(chunk,senderID);
             try {
             		System.out.println("thread going to sleep");
-               // Thread.sleep(2 ^ attempts * 1000);
             		int n_sleep= rand.nextInt(400);
             		Thread.sleep(n_sleep);
             } catch (InterruptedException e) {
