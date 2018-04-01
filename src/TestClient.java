@@ -34,31 +34,36 @@ public class TestClient {
 			System.out.println("oi");
 			initiatorPeer.backup_file(file, replication_degree);
 			break;
+		case "DELETE":
+			System.out.println("Delete");
+			initiatorPeer.delete_file(file);
+			break;
 		}
 	}
 
 
 	private static boolean process_arguments(String[] args) {
-		if (args.length<2)
-			return false;
+		stub_name=args[0];
+		String protocol=args[1].toUpperCase();
+		String file_name=args[2];
+		file = new File(file_name);
+		switch(protocol) {
+		case"BACKUP":
+			if(args.length > 2) {
+				replication_degree=Integer.parseInt(args[3]);
+				return true;
+			}else
+				return false;
+		case"DELETE":
+			if(args.length > 1)
+				return true;
+			else
+				return false;
 			
-			
-			stub_name=args[0];
-			//protocol=args[1];
-			String file_name=args[2];
-			
-			file = new File(file_name);
-			
-			replication_degree=Integer.parseInt(args[3]);
-			
-			
-		//faltam verificacoes
-			
-		
-		
-		
-		return true;
-		
+		}
+		return false;
+
+	
 		
 	}
 
