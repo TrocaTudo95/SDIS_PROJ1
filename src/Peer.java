@@ -6,6 +6,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -61,6 +63,19 @@ public class Peer implements RMI_inteface {
 //		savedChunks = new ConcurrentHashMap<>();
 //		repDegreePerFile=new ConcurrentHashMap<>();
 //		peersContainingChunks=new ConcurrentHashMap<>();
+		
+		
+		
+//		try {
+//			FileInputStream  chunkFile = new FileInputStream ("peers_info/peer"+ID);
+//		} catch (FileNotFoundException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
+		//see if the peer already exists
+		
+		
 		info=new PeerInfo();
 
 		Peer peer = new Peer();
@@ -117,6 +132,12 @@ public class Peer implements RMI_inteface {
 			e.printStackTrace();
 		}
 		System.out.println("Chunk Saved");
+	}
+
+	@Override
+	public void restore_file(File file) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

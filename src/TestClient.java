@@ -31,9 +31,10 @@ public class TestClient {
 		System.out.println(protocol);
 		switch (protocol) {
 		case"BACKUP":
-			System.out.println("oi");
 			initiatorPeer.backup_file(file, replication_degree);
 			break;
+		case"RESTORE":
+			initiatorPeer.restore_file(file);
 		}
 	}
 
