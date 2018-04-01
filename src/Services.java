@@ -39,10 +39,9 @@ public class Services {
 	
 	//Delete Header
 	
-	public void DELETE(String fileID,int senderID) {
-		String header = "DELETE" + " " + version + senderID + " " + fileID + " " + CRLF + CRLF;
-
-		//sent to mc
+	public static void DELETE(String fileID,int senderID) {
+		String header = "DELETE" + " " + version + " " + senderID + " " + fileID + " " + CRLF + CRLF;
+		sendToMC(header.getBytes());
 	}
 	
 	//Reclaim space header

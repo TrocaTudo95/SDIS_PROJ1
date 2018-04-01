@@ -12,7 +12,6 @@ import java.io.File;
 public class TestClient {
 	private static RMI_inteface initiatorPeer;
 	private static String stub_name;
-	//private static String protocol;
 	private static File file;
 	private static int replication_degree;
 	
@@ -35,25 +34,27 @@ public class TestClient {
 		System.out.println(protocol);
 		switch (protocol) {
 		case"BACKUP":
-			System.out.println("oi");
+			System.out.println("Backup");
 			initiatorPeer.backup_file(file, replication_degree);
+			break;
+		case "DELETE":
+			System.out.println("Delete");
+			initiatorPeer.delete_file(file);
 			break;
 		}
 	}
 
 
 	private static boolean process_arguments(String[] args) {
-		if (args.length<2)
-			return false;
-			
-			
+						
 			stub_name=args[0];
-			//protocol=args[1];
 			String file_name=args[2];
-			
 			file = new File(file_name);
-			
-			replication_degree=Integer.parseInt(args[3]);
+			if (stub_name == "BACKUP" && args.length == 3) {
+				replication_degree=Integer.parseInt(args[3]);
+			}else if(stub_name == "DELELTE" && args.length != 2)
+				return false;
+
 			
 			
 		//faltam verificacoes

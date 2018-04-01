@@ -34,6 +34,7 @@ public class PacketHandler implements Runnable {
 		case "CHUNK":
 			break;
 		case "DELETE":
+			DELETE_handler();
 			break;
 		case "REMOVED":
 			break;
@@ -90,6 +91,15 @@ public class PacketHandler implements Runnable {
 		Peer.peersContainingChunks.get(File_ID).get(chunkNO).add(senderID);
 	
 
+	}
+	
+	public void DELETE_handler() {
+		int senderID = Integer.parseInt(headerToken[2]);
+		if (senderID == Peer.getID())
+			return;
+		System.out.println("Handling Delete message");
+		String File_ID = this.headerToken[3];
+		Peer.deleteFile(File_ID);
 	}
 
 	public String[] HeaderExtractor() {
