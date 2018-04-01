@@ -8,8 +8,6 @@ import java.io.File;
 public interface RMI_inteface extends Remote{
 
 	void backup_file(File file, int replicationDegree) throws RemoteException;
-
-	void restore_file(File file);
 	
 	//void delete_file(File file) throws RemoteException;
 }
