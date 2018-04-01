@@ -14,7 +14,6 @@ public class Peer implements RMI_inteface {
 
 	private static int ID;
 	private static Services services;
-	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> repDegreeAtual;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
 	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
@@ -51,14 +50,7 @@ public class Peer implements RMI_inteface {
 		return used_space;
 	}
 
-	public static int getRepDegreeAtual(String fileId, int chunkNo) {
-		try {
-			return Peer.peersContainingChunks.get(fileId).get(chunkNo).size();
-		} catch (NullPointerException npe) {
-			System.out.println("merdouuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu ");
-			return 0;
-		}
-	}
+	
 
 	public static void main(String[] args) throws UnknownHostException {
 		InetAddress[] adresses = new InetAddress[3];
@@ -68,8 +60,6 @@ public class Peer implements RMI_inteface {
 		adresses[1] = InetAddress.getByName("224.0.0.0");
 		adresses[2] = InetAddress.getByName("224.0.0.0");
 		savedChunks = new ConcurrentHashMap<>();
-		repDegreeAtual= new ConcurrentHashMap<>();
-		chunksStored= new ConcurrentHashMap<>();
 		repDegreePerFile=new ConcurrentHashMap<>();
 		peersContainingChunks=new ConcurrentHashMap<>();
 

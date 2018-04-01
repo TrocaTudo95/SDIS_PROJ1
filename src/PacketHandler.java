@@ -75,20 +75,20 @@ public class PacketHandler implements Runnable {
 		if (senderID == Peer.getID())
 			return;
 		System.out.println("Handling Stored message");
-		int chunkNo = Integer.parseInt(headerToken[4]);
-		int value = 0;
-		if (Peer.chunksStored.contains(chunkNo)) {
-			Peer.chunksStored.getOrDefault(chunkNo, value);
-			value++;
-			Peer.chunksStored.remove(chunkNo);
-			Peer.chunksStored.put(chunkNo, value);
-		} else {
-			Peer.chunksStored.put(chunkNo, 1);
-		}
+	
 		String File_ID = this.headerToken[3];
 		int chunkNO = Integer.parseInt(this.headerToken[4]);
 
 		MDB_Dispatcher.storedReceived(File_ID, chunkNO, senderID);
+		
+		if(!Peer.peersContainingChunks.contains(File_ID)) 
+			Peer.peersContainingChunks.put(File_ID, new ConcurrentHashMap<>());
+		
+		if(!Peer.peersContainingChunks.get(File_ID).contains(chunkNO))
+			Peer.peersContainingChunks.get(File_ID).put(chunkNO, new ArrayList<>());
+		
+		Peer.peersContainingChunks.get(File_ID).get(chunkNO).add(senderID);
+	
 
 	}
 

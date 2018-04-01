@@ -63,8 +63,6 @@ public class BackupProtocol implements Runnable{
 		Random rand = new Random();
 		
 		while (attempts < 5 && MDB_Dispatcher.currentRepDegree(chunk.getFileID(),chunk.getChunkNo()) < replicationDegree) {
-			System.out.println("\n\nFILE ID:"+chunk.getFileID()+ " ChunkNO:"+chunk.getChunkNo()+ "\n\n");
-			//System.out.println("Already tried " +attempts +"times. current replicationDegree: "+Peer.getRepDegreeAtual(chunk.getFileID(),chunk.getChunkNo()));
             Services.PUTCHUNK(chunk,senderID);
             try {
             		System.out.println("thread going to sleep");

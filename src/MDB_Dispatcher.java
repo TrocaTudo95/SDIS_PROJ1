@@ -38,8 +38,7 @@ public class MDB_Dispatcher implements Runnable
 		
 		try {
 			return peersContainingChunks.get(FileID).get(ChunkNO).size();
-		} catch (NullPointerException npe) {
-			System.out.println("merdouuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu ");
+		} catch (NullPointerException n) {
 			return 0;
 		}
 	}
@@ -80,8 +79,6 @@ public class MDB_Dispatcher implements Runnable
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//missing verification to see if the peers are the same
 			System.out.println("received packet");
 			new Thread(new PacketHandler(mdb_packet)).start();
 		} 	
