@@ -1,4 +1,3 @@
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -16,12 +15,11 @@ public class Peer implements RMI_inteface {
 	private static Services services;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
-	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
-	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 	public static int MEMORY = 10000000;
 	private static int used_space = 0;
-	public static ConcurrentHashMap<Integer, Integer> chunksStored;
 	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
+	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
+	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
@@ -33,15 +31,6 @@ public class Peer implements RMI_inteface {
 		BackupProtocol.backupFile(file, replicationDegree);
 
 	}
-	
-	@Override
-	public void delete_file(File file) throws RemoteException {
-		System.out.println("Starting Deletion");
-		String File_ID = Functions.getHashedFileID(file);
-		Services.DELETE(File_ID, ID);
-		
-	}
-	
 
 	public static int getID() {
 		return ID;
@@ -107,6 +96,10 @@ public class Peer implements RMI_inteface {
 			Peer.repDegreePerFile.put(file_ID, replication_degree);
 
 		}
+		if(Peer.savedChunks.get(file_ID).contains(chunkNO))
+			Peer.savedChunks.get(file_ID).remove(chunkNO);
+		
+		
 		Peer.savedChunks.get(file_ID).add(chunkNO);
 		
 
@@ -122,26 +115,6 @@ public class Peer implements RMI_inteface {
 			e.printStackTrace();
 		}
 		System.out.println("Chunk Saved");
-	}
-
-	public static void deleteFile(String file_ID) {
-		if (Peer.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
-			System.out.println("Does not contain the file");
-			
-		}else {
-			Peer.savedChunks.remove(file_ID);
-			Peer.repDegreePerFile.remove(file_ID);
-			int nchunks=Peer.peersContainingChunks.get(file_ID).size();
-			Peer.peersContainingChunks.remove(file_ID);
-			for(int i=0;i< nchunks;i++) {
-				String fileName = file_ID + "_" + (nchunks+1);
-				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
-				chunkFile.delete();
-				//como remover do used_space o tamanho do ficheiro?
-			}
-		}
-		
-		
 	}
 
 }

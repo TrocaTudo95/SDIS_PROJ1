@@ -1,11 +1,8 @@
-
-
 import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 import java.io.File;
 
 
@@ -19,7 +16,7 @@ public class TestClient {
 	public static void main(String[] args) throws IOException{
 		process_arguments(args);
 		
-//connect to RMI
+			//connect to RMI
 		try {
 			Registry registry = LocateRegistry.getRegistry();
 
@@ -34,27 +31,25 @@ public class TestClient {
 		System.out.println(protocol);
 		switch (protocol) {
 		case"BACKUP":
-			System.out.println("Backup");
+			System.out.println("oi");
 			initiatorPeer.backup_file(file, replication_degree);
-			break;
-		case "DELETE":
-			System.out.println("Delete");
-			initiatorPeer.delete_file(file);
 			break;
 		}
 	}
 
 
 	private static boolean process_arguments(String[] args) {
-						
+		if (args.length<2)
+			return false;
+			
+			
 			stub_name=args[0];
+			//protocol=args[1];
 			String file_name=args[2];
+			
 			file = new File(file_name);
-			if (stub_name == "BACKUP" && args.length == 3) {
-				replication_degree=Integer.parseInt(args[3]);
-			}else if(stub_name == "DELELTE" && args.length != 2)
-				return false;
-
+			
+			replication_degree=Integer.parseInt(args[3]);
 			
 			
 		//faltam verificacoes
