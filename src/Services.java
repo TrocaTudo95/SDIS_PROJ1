@@ -40,7 +40,7 @@ public class Services {
 	//Delete Header
 	
 	public static void DELETE(String fileID,int senderID) {
-		String header = "DELETE" + " " + version + senderID + " " + fileID + " " + CRLF + CRLF;
+		String header = "DELETE" + " " + version + " " + senderID + " " + fileID + " " + CRLF + CRLF;
 		sendToMC(header.getBytes());
 	}
 	

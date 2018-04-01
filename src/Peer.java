@@ -14,7 +14,6 @@ public class Peer implements RMI_inteface {
 
 	private static int ID;
 	private static Services services;
-	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> repDegreeAtual;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
 	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
@@ -77,7 +76,6 @@ public class Peer implements RMI_inteface {
 		adresses[1] = InetAddress.getByName("224.0.0.0");
 		adresses[2] = InetAddress.getByName("224.0.0.0");
 		savedChunks = new ConcurrentHashMap<>();
-		repDegreeAtual= new ConcurrentHashMap<>();
 		chunksStored= new ConcurrentHashMap<>();
 		repDegreePerFile=new ConcurrentHashMap<>();
 		peersContainingChunks=new ConcurrentHashMap<>();
@@ -135,7 +133,22 @@ public class Peer implements RMI_inteface {
 	}
 
 	public static void deleteFile(String file_ID) {
-		//apagar 
+		if (Peer.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
+			System.out.println("Does not contain the file");
+			
+		}else {
+			Peer.savedChunks.remove(file_ID);
+			Peer.repDegreePerFile.remove(file_ID);
+			int nchunks=Peer.peersContainingChunks.get(file_ID).size();
+			Peer.peersContainingChunks.remove(file_ID);
+			for(int i=0;i< nchunks;i++) {
+				String fileName = file_ID + "_" + (nchunks+1);
+				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
+				chunkFile.delete();
+				//como remover do used_space o tamanho do ficheiro?
+			}
+		}
+		
 		
 	}
 
