@@ -17,9 +17,10 @@ public class Peer implements RMI_inteface {
 	private static MDB_Dispatcher mdbDispatcher;
 	public static int MEMORY = 10000000;
 	private static int used_space = 0;
-	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
-	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
-	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
+	public static PeerInfo info;
+//	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
+//	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
+//	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
@@ -57,9 +58,10 @@ public class Peer implements RMI_inteface {
 		adresses[0] = InetAddress.getByName("224.0.0.0");
 		adresses[1] = InetAddress.getByName("224.0.0.0");
 		adresses[2] = InetAddress.getByName("224.0.0.0");
-		savedChunks = new ConcurrentHashMap<>();
-		repDegreePerFile=new ConcurrentHashMap<>();
-		peersContainingChunks=new ConcurrentHashMap<>();
+//		savedChunks = new ConcurrentHashMap<>();
+//		repDegreePerFile=new ConcurrentHashMap<>();
+//		peersContainingChunks=new ConcurrentHashMap<>();
+		info=new PeerInfo();
 
 		Peer peer = new Peer();
 		try {
@@ -90,17 +92,17 @@ public class Peer implements RMI_inteface {
 	}
 
 	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
-		if (Peer.savedChunks.containsKey(file_ID) == false) {
+		if (PeerInfo.savedChunks.containsKey(file_ID) == false) {
 			System.out.println("Does not contain the file yet");
-			Peer.savedChunks.put(file_ID, new ArrayList<>());
-			Peer.repDegreePerFile.put(file_ID, replication_degree);
+			PeerInfo.savedChunks.put(file_ID, new ArrayList<>());
+			PeerInfo.repDegreePerFile.put(file_ID, replication_degree);
 
 		}
-		if(Peer.savedChunks.get(file_ID).contains(chunkNO))
-			Peer.savedChunks.get(file_ID).remove(chunkNO);
+		if(PeerInfo.savedChunks.get(file_ID).contains(chunkNO))
+			PeerInfo.savedChunks.get(file_ID).remove(chunkNO);
 		
 		
-		Peer.savedChunks.get(file_ID).add(chunkNO);
+		PeerInfo.savedChunks.get(file_ID).add(chunkNO);
 		
 
 		used_space += body.length;
