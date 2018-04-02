@@ -58,6 +58,24 @@ public class Peer implements RMI_inteface {
 	public static int getUsedSpace() {
 		return used_space;
 	}
+	
+	
+	
+	public static  void storeInformation() {
+		
+		try {
+	         FileOutputStream fileOut =
+	         new FileOutputStream("peer"+ID+".ser");
+	         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+	         out.writeObject(info);
+	         out.close();
+	         fileOut.close();
+	      } catch (IOException i) {
+	    	  System.out.println("merda");
+	         i.printStackTrace();
+	      }
+		
+	}
 
 	
 
@@ -68,39 +86,39 @@ public class Peer implements RMI_inteface {
 		adresses[0] = InetAddress.getByName("224.0.0.0");
 		adresses[1] = InetAddress.getByName("224.0.0.0");
 		adresses[2] = InetAddress.getByName("224.0.0.0");
-//		savedChunks = new ConcurrentHashMap<>();
-//		repDegreePerFile=new ConcurrentHashMap<>();
-//		peersContainingChunks=new ConcurrentHashMap<>();
+
 		
-//		 try {
-//			FileInputStream fileIn = new FileInputStream("peerData/peer"+ID);
-//			try {
-//				ObjectInputStream in = new ObjectInputStream(fileIn);
-//				info=(PeerInfo)in.readObject();
-//				in.close();
-//		        fileIn.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		} catch (FileNotFoundException e1) {
-//			info=new PeerInfo();
-//			try {
-//		         FileOutputStream fileOut =
-//		         new FileOutputStream("peerData/peer"+ID+".ser");
-//		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//		         out.writeObject(info);
-//		         out.close();
-//		         fileOut.close();
-//		      } catch (IOException i) {
-//		         i.printStackTrace();
-//		      }
-//			
-//		}
+		Peer peer = new Peer();
+		 try {
+			FileInputStream fileIn = new FileInputStream("peer"+ID+".ser");
+			try {	
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				info=(PeerInfo)in.readObject();
+				in.close();
+		        fileIn.close();
+		        System.out.println("PeerInfo loaded");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e1) {
+			info=new PeerInfo();
+			try {
+		         FileOutputStream fileOut =
+		         new FileOutputStream("peer"+ID+".ser");
+		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		         out.writeObject(info);
+		         out.close();
+		         System.out.println("PeerInfo stored");
+		         fileOut.close();
+		      } catch (IOException i) {
+		         i.printStackTrace();
+		      }
+			
+		}
 		 
 		
 
-		Peer peer = new Peer();
 		try {
 			RMI_inteface stub = (RMI_inteface) UnicastRemoteObject.exportObject(peer, 0);
 
@@ -129,17 +147,17 @@ public class Peer implements RMI_inteface {
 	}
 
 	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
-		if (PeerInfo.savedChunks.containsKey(file_ID) == false) {
+		if (info.savedChunks.containsKey(file_ID) == false) {
 			System.out.println("Does not contain the file yet");
-			PeerInfo.savedChunks.put(file_ID, new ArrayList<>());
-			PeerInfo.repDegreePerFile.put(file_ID, replication_degree);
+			info.savedChunks.put(file_ID, new ArrayList<>());
+			info.repDegreePerFile.put(file_ID, replication_degree);
 
 		}
-		if(PeerInfo.savedChunks.get(file_ID).contains(chunkNO))
-			PeerInfo.savedChunks.get(file_ID).remove(chunkNO);
+		if(info.savedChunks.get(file_ID).contains(chunkNO))
+			info.savedChunks.get(file_ID).remove(chunkNO);
 		
 		
-		PeerInfo.savedChunks.get(file_ID).add(chunkNO);
+		info.savedChunks.get(file_ID).add(chunkNO);
 		
 
 		used_space += body.length;
@@ -154,18 +172,20 @@ public class Peer implements RMI_inteface {
 			e.printStackTrace();
 		}
 		System.out.println("Chunk Saved");
+		
+		storeInformation();
 	}
 	
 	public static void deleteFile(String file_ID) {
-		if (PeerInfo.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
+		try {
+		if (info.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
 			System.out.println("Does not contain the file");
 			
 		}else {
-			int nchunks=PeerInfo.savedChunks.get(file_ID).size();
-			PeerInfo.savedChunks.remove(file_ID);
-			PeerInfo.repDegreePerFile.remove(file_ID);
-			
-			PeerInfo.peersContainingChunks.remove(file_ID);
+			int nchunks=info.savedChunks.get(file_ID).size();
+			info.savedChunks.remove(file_ID);
+			info.repDegreePerFile.remove(file_ID);
+			info.peersContainingChunks.remove(file_ID);
 			
 			
 			for(int i=0;i< nchunks;i++) {
@@ -173,10 +193,15 @@ public class Peer implements RMI_inteface {
 				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
 				chunkFile.delete();
 				//como remover do used_space o tamanho do ficheiro?
+				
+				
 			}
 		}
-		
-		
+		}
+		catch(NullPointerException npe) {
+			return;
+		}
+		storeInformation();
 	}
 
 }

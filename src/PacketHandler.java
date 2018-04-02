@@ -56,7 +56,7 @@ public class PacketHandler implements Runnable {
 			String File_ID = this.headerToken[3];
 			int chunkNO = Integer.parseInt(this.headerToken[4]);
 			int replication_degree = Integer.parseInt(this.headerToken[5]);
-			if (!(PeerInfo.savedChunks.containsKey(File_ID)) || !(PeerInfo.savedChunks.get(File_ID).contains(chunkNO))) {
+			if (!(Peer.info.savedChunks.containsKey(File_ID)) || !(Peer.info.savedChunks.get(File_ID).contains(chunkNO))) {
 				System.out.println("saving chunk");
 				Peer.saveChunk(File_ID, chunkNO, replication_degree, body);
 				System.out.println("Sending Stored message");
@@ -81,13 +81,13 @@ public class PacketHandler implements Runnable {
 
 		MDB_Dispatcher.storedReceived(File_ID, chunkNO, senderID);
 		
-		if(!PeerInfo.peersContainingChunks.contains(File_ID)) 
-			PeerInfo.peersContainingChunks.put(File_ID, new ConcurrentHashMap<>());
+		if(!Peer.info.peersContainingChunks.contains(File_ID)) 
+			Peer.info.peersContainingChunks.put(File_ID, new ConcurrentHashMap<>());
 		
-		if(!PeerInfo.peersContainingChunks.get(File_ID).contains(chunkNO))
-			PeerInfo.peersContainingChunks.get(File_ID).put(chunkNO, new ArrayList<>());
+		if(!Peer.info.peersContainingChunks.get(File_ID).contains(chunkNO))
+			Peer.info.peersContainingChunks.get(File_ID).put(chunkNO, new ArrayList<>());
 		
-		PeerInfo.peersContainingChunks.get(File_ID).get(chunkNO).add(senderID);
+		Peer.info.peersContainingChunks.get(File_ID).get(chunkNO).add(senderID);
 	
 
 	}
