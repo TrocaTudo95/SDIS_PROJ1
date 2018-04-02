@@ -98,6 +98,7 @@ public class PacketHandler implements Runnable {
 			return;
 		System.out.println("Handling Delete message");
 		String File_ID = this.headerToken[3];
+		MDB_Dispatcher.peershavingChunks.remove(File_ID);
 		Peer.deleteFile(File_ID);
 	}
 

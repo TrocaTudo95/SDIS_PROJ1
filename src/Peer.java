@@ -132,12 +132,15 @@ public class Peer implements RMI_inteface {
 			System.out.println("Does not contain the file");
 			
 		}else {
+			int nchunks=PeerInfo.savedChunks.get(file_ID).size();
 			PeerInfo.savedChunks.remove(file_ID);
 			PeerInfo.repDegreePerFile.remove(file_ID);
-			int nchunks=PeerInfo.peersContainingChunks.get(file_ID).size();
+			
 			PeerInfo.peersContainingChunks.remove(file_ID);
+			
+			
 			for(int i=0;i< nchunks;i++) {
-				String fileName = file_ID + "_" + (nchunks+1);
+				String fileName = file_ID + "_" + (i	+1);
 				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
 				chunkFile.delete();
 				//como remover do used_space o tamanho do ficheiro?
