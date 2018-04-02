@@ -10,7 +10,7 @@ public class RestoreProtocol{
 
 	public static void RestoreFile(String fileId) {
 		file_ID = fileId;
-		int nChunks = PeerInfo.savedChunks.get(fileId).size();
+		int nChunks = Peer.info.savedChunks.get(fileId).size();
 		for(int i=1;i <= nChunks;i++) {
 			
 			Services.GETCHUNK(fileId,i,Peer.getID());
@@ -23,12 +23,12 @@ public class RestoreProtocol{
 	}
 	public static void AssembleFile() {
 		byte[] fileDados = new byte[0];
-		int nChunks = PeerInfo.savedChunks.get(file_ID).size();
+		int nChunks = Peer.info.savedChunks.get(file_ID).size();
 		if(full) {
 			for(int i=1;i <= nChunks;i++) {
-				for(int k=0;k < PeerInfo.chunksToRestore.size();k++) {
-					if(PeerInfo.chunksToRestore.get(k).getChunkNo() == i) {
-						Functions.concatB(fileDados,PeerInfo.chunksToRestore.get(k).getDados());
+				for(int k=0;k < Peer.info.chunksToRestore.size();k++) {
+					if(Peer.info.chunksToRestore.get(k).getChunkNo() == i) {
+						Functions.concatB(fileDados,Peer.info.chunksToRestore.get(k).getDados());
 					}
 				}
 			}
