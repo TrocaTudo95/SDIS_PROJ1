@@ -6,8 +6,12 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 public class Peer implements RMI_inteface {
 
@@ -19,9 +23,6 @@ public class Peer implements RMI_inteface {
 	public static int MEMORY = 10000000;
 	private static int used_space = 0;
 	public static PeerInfo info;
-//	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
-//	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
-//	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
 
 	@Override
 	public void backup_file(File file, int replicationDegree) throws RemoteException {
@@ -33,21 +34,22 @@ public class Peer implements RMI_inteface {
 		BackupProtocol.backupFile(file, replicationDegree);
 
 	}
-	
+
 	@Override
 	public void delete_file(File file) throws RemoteException {
 		System.out.println("Starting Deletion");
 		String File_ID = Functions.getHashedFileID(file);
+		MDB_Dispatcher.peershavingChunks.remove(File_ID);
 		Services.DELETE(File_ID, ID);
-		
+
 	}
-	
+
 	@Override
 	public void restore_file(File file) throws RemoteException{
 		System.out.println("Starting Restore");
 		String File_ID = Functions.getHashedFileID(file);
 		RestoreProtocol.RestoreFile(File_ID);
-		
+
 	}
 
 	public static int getID() {
@@ -66,9 +68,9 @@ public class Peer implements RMI_inteface {
 		return used_space;
 	}
 
-	
 
-	public static void main(String[] args) throws UnknownHostException {
+
+	public static void main(String[] args) throws UnknownHostException, ClassNotFoundException {
 		InetAddress[] adresses = new InetAddress[3];
 		ID=Integer.parseInt(args[1]);
 		int[] ports = new int[] { 8000, 8001, 8002 };
@@ -78,7 +80,34 @@ public class Peer implements RMI_inteface {
 //		savedChunks = new ConcurrentHashMap<>();
 //		repDegreePerFile=new ConcurrentHashMap<>();
 //		peersContainingChunks=new ConcurrentHashMap<>();
-		info=new PeerInfo();
+
+//		 try {
+//			FileInputStream fileIn = new FileInputStream("peerData/peer"+ID);
+//			try {
+//				ObjectInputStream in = new ObjectInputStream(fileIn);
+//				info=(PeerInfo)in.readObject();
+//				in.close();
+//		        fileIn.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		} catch (FileNotFoundException e1) {
+//			info=new PeerInfo();
+//			try {
+//		         FileOutputStream fileOut =
+//		         new FileOutputStream("peerData/peer"+ID+".ser");
+//		         ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//		         out.writeObject(info);
+//		         out.close();
+//		         fileOut.close();
+//		      } catch (IOException i) {
+//		         i.printStackTrace();
+//		      }
+//
+//		}
+
+
 
 		Peer peer = new Peer();
 		try {
@@ -120,10 +149,10 @@ public class Peer implements RMI_inteface {
 		}
 		if(PeerInfo.savedChunks.get(file_ID).contains(chunkNO))
 			PeerInfo.savedChunks.get(file_ID).remove(chunkNO);
-		
-		
+
+
 		PeerInfo.savedChunks.get(file_ID).add(chunkNO);
-		
+
 
 		used_space += body.length;
 
@@ -138,16 +167,19 @@ public class Peer implements RMI_inteface {
 		}
 		System.out.println("Chunk Saved");
 	}
-	
+
 	public static void deleteFile(String file_ID) {
 		if (PeerInfo.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
 			System.out.println("Does not contain the file");
-			
+
 		}else {
+			int nchunks=PeerInfo.savedChunks.get(file_ID).size();
 			PeerInfo.savedChunks.remove(file_ID);
 			PeerInfo.repDegreePerFile.remove(file_ID);
-			int nchunks=PeerInfo.peersContainingChunks.get(file_ID).size();
+
 			PeerInfo.peersContainingChunks.remove(file_ID);
+
+
 			for(int i=0;i< nchunks;i++) {
 				String fileName = file_ID + "_" + (i+1);
 				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
@@ -155,8 +187,8 @@ public class Peer implements RMI_inteface {
 				//como remover do used_space o tamanho do ficheiro?
 			}
 		}
-		
-		
+
+
 	}
 
 }

@@ -15,20 +15,24 @@ public class MDB_Dispatcher implements Runnable
 
 	public InetAddress mdb_address;
 	public int mdb_port;
-	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
+	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peershavingChunks;
 	public static final int CHUNK_SIZE =64000;
 
 	
+	public static void sayHello() {
+		System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+	}
+	
 	
 	public static void storedReceived(String FileID, int ChunkNO,int PeerID) {
-		if(!peersContainingChunks.containsKey(FileID)) {
-			peersContainingChunks.put(FileID,  new ConcurrentHashMap<>());
+		if(!peershavingChunks.containsKey(FileID)) {
+			peershavingChunks.put(FileID,  new ConcurrentHashMap<>());
 		}
 		
-		if (!peersContainingChunks.get(FileID).containsKey(ChunkNO))
-            peersContainingChunks.get(FileID).put(ChunkNO, new ArrayList<>());
+		if (!peershavingChunks.get(FileID).containsKey(ChunkNO))
+			peershavingChunks.get(FileID).put(ChunkNO, new ArrayList<>());
 		
-		peersContainingChunks.get(FileID).get(ChunkNO).add(PeerID);
+		peershavingChunks.get(FileID).get(ChunkNO).add(PeerID);
 			
 		
 	}
@@ -37,7 +41,7 @@ public class MDB_Dispatcher implements Runnable
 		
 		
 		try {
-			return peersContainingChunks.get(FileID).get(ChunkNO).size();
+			return peershavingChunks.get(FileID).get(ChunkNO).size();
 		} catch (NullPointerException n) {
 			return 0;
 		}
@@ -48,7 +52,7 @@ public class MDB_Dispatcher implements Runnable
 	public MDB_Dispatcher(int mdb_port,InetAddress mdb_address) {
 		this.mdb_port=mdb_port;
 		this.mdb_address=mdb_address;
-		peersContainingChunks=new ConcurrentHashMap();
+		peershavingChunks=new ConcurrentHashMap();
 	}
 
 	

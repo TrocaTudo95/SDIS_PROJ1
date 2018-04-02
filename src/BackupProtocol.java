@@ -76,8 +76,8 @@ public class BackupProtocol implements Runnable{
 		if (attempts == 5)
             System.out.println("Couldn't backup chunk");
         else {
-        	if( MDB_Dispatcher.currentRepDegree(chunk.getFileID(),chunk.getChunkNo()) == replicationDegree)
-            System.out.println("Backup for chunk finished successfully");
+        	if( MDB_Dispatcher.currentRepDegree(chunk.getFileID(),chunk.getChunkNo()) == replicationDegree && replicationDegree>0)
+            System.out.println("Backup for chunk finished successfully. there are "+MDB_Dispatcher.currentRepDegree(chunk.getFileID(),chunk.getChunkNo()) +" peers with this chunk");
         	else
         		System.out.println("It wasn't possible to backup the file with the required replication degree");
         }
