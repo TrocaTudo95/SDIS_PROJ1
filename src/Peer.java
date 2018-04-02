@@ -15,6 +15,7 @@ public class Peer implements RMI_inteface {
 	private static Services services;
 	private static MC_Dispatcher mcDispatcher;
 	private static MDB_Dispatcher mdbDispatcher;
+	private static MDR_Dispatcher mdrDispatcher;
 	public static int MEMORY = 10000000;
 	private static int used_space = 0;
 	public static PeerInfo info;
@@ -38,6 +39,14 @@ public class Peer implements RMI_inteface {
 		System.out.println("Starting Deletion");
 		String File_ID = Functions.getHashedFileID(file);
 		Services.DELETE(File_ID, ID);
+		
+	}
+	
+	@Override
+	public void restore_file(File file) throws RemoteException{
+		System.out.println("Starting Restore");
+		String File_ID = Functions.getHashedFileID(file);
+		RestoreProtocol.RestoreFile(File_ID);
 		
 	}
 
@@ -98,6 +107,9 @@ public class Peer implements RMI_inteface {
 	public static MDB_Dispatcher getMDBDispacther() {
 		return mdbDispatcher;
 	}
+	public static MDR_Dispatcher getMDRDispacther() {
+		return mdrDispatcher;
+	}
 
 	public static void saveChunk(String file_ID, int chunkNO, int replication_degree, byte[] body) {
 		if (PeerInfo.savedChunks.containsKey(file_ID) == false) {
@@ -137,7 +149,7 @@ public class Peer implements RMI_inteface {
 			int nchunks=PeerInfo.peersContainingChunks.get(file_ID).size();
 			PeerInfo.peersContainingChunks.remove(file_ID);
 			for(int i=0;i< nchunks;i++) {
-				String fileName = file_ID + "_" + (nchunks+1);
+				String fileName = file_ID + "_" + (i+1);
 				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
 				chunkFile.delete();
 				//como remover do used_space o tamanho do ficheiro?

@@ -1,5 +1,8 @@
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
@@ -29,8 +32,10 @@ public class PacketHandler implements Runnable {
 			STORED_handler();
 			break;
 		case "GETCHUNK":
+			GETCHUNK_handler();
 			break;
 		case "CHUNK":
+			CHUNK_handler();
 			break;
 		case "DELETE":
 			DELETE_handler();
@@ -99,6 +104,61 @@ public class PacketHandler implements Runnable {
 		System.out.println("Handling Delete message");
 		String File_ID = this.headerToken[3];
 		Peer.deleteFile(File_ID);
+	}
+	
+	public void GETCHUNK_handler() {
+		int senderID = Integer.parseInt(headerToken[2]);
+		if (senderID == Peer.getID())
+			return;
+		System.out.println("Handling GETCHUNK message");
+		String fileID = this.headerToken[3];
+		int chunkNo = Integer.parseInt(this.headerToken[4]);
+		if(PeerInfo.savedChunks.get(fileID).contains(chunkNo)) { // Peer have a copy of that chunk
+			String chunkName =fileID + "_" + chunkNo;
+			File chunkFile = new File("chunksDir/" + chunkName);
+			try {
+				FileInputStream inputStream = new FileInputStream(chunkFile);
+				byte[] body = new byte[(int) chunkFile.length()];
+				try {
+					inputStream.read(body);
+					inputStream.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Random random= new Random();
+			
+			try {
+	            Thread.sleep(random.nextInt(401)); //random sleep time between 0 and 400
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        }
+
+			
+			Chunk chunk = new Chunk(fileID,chunkNo,0,body);
+			Services.CHUNK(chunk, Peer.getID());
+
+		}
+		
+	}
+	
+	public void CHUNK_handler() {
+		int senderID = Integer.parseInt(headerToken[2]);
+		if (senderID == Peer.getID())
+			return;
+		System.out.println("Handling Chunk message");
+		String File_ID = this.headerToken[3];
+		int chunkNO = Integer.parseInt(this.headerToken[4]);
+		byte[] body = BodyExtractor();
+		Chunk chunk=new Chunk(File_ID,chunkNO,0,body);
+		PeerInfo.chunksToRestore.add(chunk);
+		RestoreProtocol.AssembleFile();
+		
 	}
 
 	public String[] HeaderExtractor() {

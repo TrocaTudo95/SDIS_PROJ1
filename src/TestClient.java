@@ -31,8 +31,12 @@ public class TestClient {
 		System.out.println(protocol);
 		switch (protocol) {
 		case"BACKUP":
-			System.out.println("oi");
+			System.out.println("Backup");
 			initiatorPeer.backup_file(file, replication_degree);
+			break;
+		case "RESTORE":
+			System.out.println("Restore");
+			initiatorPeer.restore_file(file);
 			break;
 		case "DELETE":
 			System.out.println("Delete");
@@ -55,6 +59,11 @@ public class TestClient {
 			}else
 				return false;
 		case"DELETE":
+			if(args.length > 1)
+				return true;
+			else
+				return false;
+		case"RESTORE":
 			if(args.length > 1)
 				return true;
 			else

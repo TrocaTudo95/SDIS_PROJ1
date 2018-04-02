@@ -6,11 +6,13 @@ public class PeerInfo implements Serializable{
 	public static ConcurrentHashMap<String, ConcurrentHashMap<Integer, ArrayList<Integer>>> peersContainingChunks;
 	public static ConcurrentHashMap<String, ArrayList<Integer>> savedChunks;
 	public static ConcurrentHashMap<String, Integer> repDegreePerFile;
+	public static ArrayList<Chunk> chunksToRestore;
 	
 	
 	public PeerInfo() {
 		savedChunks = new ConcurrentHashMap<>();
 		repDegreePerFile=new ConcurrentHashMap<>();
 		peersContainingChunks=new ConcurrentHashMap<>();
+		chunksToRestore = new ArrayList<>();
 	}
 }

@@ -14,7 +14,7 @@ public class Services {
 	public static void PUTCHUNK(Chunk chunk,int senderID) {
 		System.out.println("sending putchunk");
 		String header = "PUTCHUNK" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + chunk.getRepDegree() + " " + CRLF + CRLF;
-		byte[] packet = concatB(header.getBytes(), chunk.getDados());
+		byte[] packet = Functions.concatB(header.getBytes(), chunk.getDados());
 		sendToMDB(packet);
 	}
 
@@ -24,17 +24,16 @@ public class Services {
 	}
 	
 	//Restore Headers
-	void GETCHUNK(Chunk chunk,int senderID) {
+	public static void GETCHUNK(String fileId,int ChunkNo,int senderID) {
 		
-		String header = "GETCHUNK" + " " + version + " " + senderID + " " + chunk.getFileID() + " " + chunk.getChunkNo() + " " + CRLF + CRLF;
-
-		//Send To MC
+		String header = "GETCHUNK" + " " + version + " " + senderID + " " + fileId + " " + ChunkNo + " " + CRLF + CRLF;
+		sendToMC(header.getBytes());
 	}
 	
-	public void CHUNK(Chunk chunk,int senderID) {
+	public static void CHUNK(Chunk chunk,int senderID) {
 		String header = "CHUNK" + " " + version + " " + senderID + " "+ chunk.getFileID() + " " + chunk.getChunkNo() + " " + CRLF + CRLF;
-
-		//send to MDR
+		byte[] packet = Functions.concatB(header.getBytes(), chunk.getDados());
+		sendToMDR(packet);
 	}
 	
 	//Delete Header
@@ -78,14 +77,18 @@ public class Services {
 		System.out.println("writing to mdb");
 	}
 	
-	private static byte[] concatB(byte[] a, byte[] b) {
+	private synchronized static void sendToMDR(byte[] buf) {
+		DatagramPacket packet = new DatagramPacket(buf, buf.length,Peer.getMDRDispacther().mdr_address, Peer.getMDRDispacther().mdr_port);
 
-		byte[] c = new byte[a.length + b.length];
-		System.arraycopy(a, 0, c, 0, a.length);
-		System.arraycopy(b, 0, c, a.length,  b.length);
-
-		return c;
+		try {
+			MDR_Dispatcher.mdr_socket.send(packet);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("writing to mdr");
 	}
+	
 	
 	
 
