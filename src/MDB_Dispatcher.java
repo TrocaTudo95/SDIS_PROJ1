@@ -19,6 +19,10 @@ public class MDB_Dispatcher implements Runnable
 	public static final int CHUNK_SIZE =64000;
 
 	
+	public static void sayHello() {
+		System.out.println("HELLOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+	}
+	
 	
 	public static void storedReceived(String FileID, int ChunkNO,int PeerID) {
 		if(!peershavingChunks.containsKey(FileID)) {

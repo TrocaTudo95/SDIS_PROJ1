@@ -37,6 +37,7 @@ public class Peer implements RMI_inteface {
 	public void delete_file(File file) throws RemoteException {
 		System.out.println("Starting Deletion");
 		String File_ID = Functions.getHashedFileID(file);
+		MDB_Dispatcher.peershavingChunks.remove(File_ID);
 		Services.DELETE(File_ID, ID);
 		
 	}
