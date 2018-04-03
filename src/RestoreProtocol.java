@@ -6,11 +6,12 @@ public class RestoreProtocol{
 	
 	private static boolean full = false;
 	private static String file_ID;
+	private static int nChunks;
 	
 
-	public static void RestoreFile(String fileId) {
+	public static void RestoreFile(String fileId, int n_chunks) {
 		file_ID = fileId;
-		int nChunks = Peer.info.savedChunks.get(fileId).size();
+		 nChunks = n_chunks;
 		for(int i=1;i <= nChunks;i++) {
 			
 			Services.GETCHUNK(fileId,i,Peer.getID());
@@ -23,7 +24,6 @@ public class RestoreProtocol{
 	}
 	public static void AssembleFile() {
 		byte[] fileDados = new byte[0];
-		int nChunks = Peer.info.savedChunks.get(file_ID).size();
 		if(full) {
 			for(int i=1;i <= nChunks;i++) {
 				for(int k=0;k < Peer.info.chunksToRestore.size();k++) {

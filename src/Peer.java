@@ -48,7 +48,8 @@ public class Peer implements RMI_inteface {
 	public void restore_file(File file) throws RemoteException{
 		System.out.println("Starting Restore");
 		String File_ID = Functions.getHashedFileID(file);
-		RestoreProtocol.RestoreFile(File_ID);
+		int n_chunks= MDB_Dispatcher.peershavingChunks.get(File_ID).size();
+		RestoreProtocol.RestoreFile(File_ID,n_chunks);
 
 	}
 
@@ -193,7 +194,7 @@ public class Peer implements RMI_inteface {
 
 	public static void deleteFile(String file_ID) {
 		try {
-		if (info.savedChunks.containsKey(file_ID) == false) { // esta a dar false aqui...dont know why
+		if (info.savedChunks.containsKey(file_ID) == false) { 
 			System.out.println("Does not contain the file");
 
 		}else {
@@ -205,9 +206,9 @@ public class Peer implements RMI_inteface {
 			
 			for(int i=0;i< nchunks;i++) {
 				String fileName = file_ID + "_" + (i+1);
-				File chunkFile = new File("chunksDir/"+fileName);   //nao sei se isto esta a apagar os ficheiros
+				File chunkFile = new File("chunksDir/"+fileName);   
 				chunkFile.delete();
-				//como remover do used_space o tamanho do ficheiro?
+				used_space-=chunkFile.length();
 				
 				
 			}

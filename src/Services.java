@@ -32,6 +32,8 @@ public class Services {
 	
 	public static void CHUNK(Chunk chunk,int senderID) {
 		String header = "CHUNK" + " " + version + " " + senderID + " "+ chunk.getFileID() + " " + chunk.getChunkNo() + " " + CRLF + CRLF;
+		System.out.println(header.getBytes());
+		System.out.println(chunk.getDados());
 		byte[] packet = Functions.concatB(header.getBytes(), chunk.getDados());
 		sendToMDR(packet);
 	}
